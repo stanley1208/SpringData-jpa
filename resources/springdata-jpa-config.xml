@@ -17,21 +17,56 @@
 	<bean
 		class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
 		<property name="location" value="classpath:db.properties" />
+		
 	</bean>
 
 	<!-- 1. 配置數據源 -->
-	
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driver}"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean>
 
 	<!-- 2. 配置 JPA 的 EntityManagerFactory -->
-	
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<!-- 定義datasource -->
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 定義vendor -->
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"></bean>
+		</property>
+		<!-- 定義entity掃描區 -->
+		<property name="packagesToScan">
+			<list>
+				<value>com.spring.mvc</value>
+			</list>
+		</property>
+		<!-- jpa vendor 的配置設定-->
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<!-- update 表示若資料表不存在但是有entity就會自動新增 -->
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+	</bean>
 
 	<!-- 3. 配置事務管理器 -->
-	
+	<bean id="transactionManager"
+		class="org.springframework.orm.jpa.JpaTransactionManager"><property name="entityManagerFactory" ref="entityManagerFactory"></property>
+</bean>
 
 	<!-- 4. 配置支援註解@的事務 -->
-	
+	<tx:annotation-driven transaction-manager="transactionManager"/>
 
 	<!-- 5. 配置 Spring Data Jpa, base-package: 掃描 Repository Bean 所在的 package -->
-	
+	<jpa:repositories base-package="com.spring.mvc"
+					entity-manager-factory-ref="entityManagerFactory"
+					transaction-manager-ref="transactionManager"
+	></jpa:repositories>
 </beans>
 
