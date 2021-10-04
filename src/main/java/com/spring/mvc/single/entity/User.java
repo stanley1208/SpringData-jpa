@@ -16,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-@Table(name = "User")
+@Table(name = "User2")
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
