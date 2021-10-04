@@ -3,6 +3,7 @@ package com.spring.mvc.single.controller;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -12,10 +13,13 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.javafaker.Faker;
@@ -122,11 +126,42 @@ public class UserController {
 	public List<User> testPage(@PathVariable("no") Integer no) {
 		int pageNo = no;
 		int pageSize = 10;
+		// 排序
+		Sort.Order order1 = new Sort.Order(Sort.Direction.ASC, "name");
+		Sort.Order order2 = new Sort.Order(Sort.Direction.DESC, "name");
+		Sort sort = new Sort(order1, order2);
+
 		// 分頁請求
-		PageRequest pageRequest = new PageRequest(pageNo, pageSize);
+		PageRequest pageRequest = new PageRequest(pageNo, pageSize, sort);
 		Page<User> page = userRepository.findAll(pageRequest);
 
 		return page.getContent();
 	}
 
+	@GetMapping("test/name")
+	@ResponseBody
+	public List<User> getByName(@RequestParam("name") String name) {
+		return userRepository.getByName(name);
+	}
+
+	// 測試url:/mvc/user/test/name/id/S/50
+	@GetMapping("test/name/id/{name}/{id}")
+	@ResponseBody
+	public List<User> getByNameAndId(@PathVariable("name") String name, @PathVariable("id") Long id) {
+		return userRepository.getByNameStartingWithAndIdGreaterThanEqual(name, id);
+	}
+
+	// 測試url:/mvc/user/test/ids?ids=5,10,15
+	@GetMapping("test/ids")
+	@ResponseBody
+	public List<User> getByIds(@RequestParam("ids") List<Long> ids) {
+		return userRepository.getByIdIn(ids);
+	}
+
+	// 測試url:/mvc/user/test/birth?birth=2000-9-9
+	@GetMapping("test/birth")
+	@ResponseBody
+	public List<User> getByBirthLessThan(@RequestParam("birth") @DateTimeFormat(iso=ISO.DATE) Date birth) {
+		return userRepository.getByBirthLessThan(birth);
+	}
 }
