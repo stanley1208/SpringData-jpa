@@ -161,7 +161,15 @@ public class UserController {
 	// ´ú¸Õurl:/mvc/user/test/birth?birth=2000-9-9
 	@GetMapping("test/birth")
 	@ResponseBody
-	public List<User> getByBirthLessThan(@RequestParam("birth") @DateTimeFormat(iso=ISO.DATE) Date birth) {
+	public List<User> getByBirthLessThan(@RequestParam("birth") @DateTimeFormat(iso = ISO.DATE) Date birth) {
 		return userRepository.getByBirthLessThan(birth);
+	}
+
+	// ´ú¸Õurl:/mvc/user/test/birth_between?begin=1965-1-1&end=1970-12-31
+	@GetMapping("test/birth_between")
+	@ResponseBody
+	public List<User> getByBirthBetween(@RequestParam("begin") @DateTimeFormat(iso = ISO.DATE) Date begin,
+			@RequestParam("end") @DateTimeFormat(iso = ISO.DATE) Date end) {
+		return userRepository.getByBirthBetween(begin, end);
 	}
 }

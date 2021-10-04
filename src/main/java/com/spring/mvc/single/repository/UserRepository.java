@@ -29,4 +29,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	//Where birth<?
 	List<User>getByBirthLessThan(Date birth);
 	
+	//Where birth>=? AND birth <=?
+	//Where birth between ?(§t) AND ? AND?
+	List<User>getByBirthBetween(Date birthBegin,Date birthEnd);
 }
