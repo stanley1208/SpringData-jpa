@@ -117,7 +117,7 @@ public class UserController {
 	@ResponseBody
 	public User getOne() {
 
-		return userRepository.findOne(3L);
+		return userRepository.findOne(5L);
 	}
 
 	// ¬d¸ß¤À­¶
