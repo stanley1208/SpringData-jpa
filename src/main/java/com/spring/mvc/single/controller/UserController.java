@@ -37,56 +37,53 @@ import com.spring.mvc.single.repository.UserRepository;
 public class UserController {
 	@Autowired
 	private UserRepository userRepository;
-	
-	//User資料維護首頁
-	@GetMapping(value = {"/","/index"})
+
+	// User 資料維護首頁
+	@GetMapping(value = { "/", "/index" })
 	public String index(Model model) {
 		List<User> users = userRepository.findAll();
-
-		model.addAttribute("user",new User());
-		model.addAttribute("users",users);
-		model.addAttribute("_method","POST");
-
-		return "user/index"; //重導到/WEB-INF/view/user/user.jsp
+		model.addAttribute("user", new User());
+		model.addAttribute("users", users);
+		model.addAttribute("_method", "POST");
+		return "user/index"; // 重導到 /WEB-INF/view/user/index.jsp
 	}
-	
-	//User新增
-	@PostMapping(value="/")
+
+	// User 新增
+	@PostMapping(value = "/")
 	public String create(User user) {
 		userRepository.save(user);
-		System.out.println("User create: "+user);
+		System.out.println("User create: " + user);
 		return "redirect: ./";
 	}
-	
-	//User4 修改
+
+	// User 修改
 	@PutMapping(value = "/")
 	public String update(User user) {
 		userRepository.saveAndFlush(user);
-		System.out.println("User update: "+user);
+		System.out.println("User update: " + user);
 		return "redirect: ./";
 	}
-	
-	//User 刪除
+
+	// User 刪除
 	@DeleteMapping(value = "/")
 	public String delete(User user) {
 		userRepository.delete(user.getId());
 		return "redirect: ./";
 	}
-	
-	//根據id查詢
-	@GetMapping("/{id}")
-	public String getUserById(Model model,@PathVariable Long id) {
-		User user=userRepository.findOne(id);
-		List<User> users = userRepository.findAll();
 
-		model.addAttribute("user",user);
-		model.addAttribute("users",users);
-		model.addAttribute("_method","PUT");
+	// 根據 id 查詢
+	@GetMapping("/{id}")
+	public String getUserById(Model model, @PathVariable Long id) {
+		User user = userRepository.findOne(id);
+		List<User> users = userRepository.findAll();
+		model.addAttribute("user", user);
+		model.addAttribute("users", users);
+		model.addAttribute("_method", "PUT");
 		return "user/index"; // 重導到 /WEB-INF/view/user/index.jsp
 	}
-	
-	//-----------------------------
-	//以下是測試user的程式
+
+	// -----------------------------
+	// 以下是測試user的程式
 	// 新增範例資料
 	@GetMapping("/test/create_sample_data")
 	@ResponseBody
@@ -97,7 +94,7 @@ public class UserController {
 		for (int i = 0; i < count; i++) {
 			User user = new User();
 			user.setName(faker.name().lastName());
-			user.setPassword(String.format("%04d", r.nextInt(10000)));
+			user.setPassword(String.format("% 04d", r.nextInt(10000)));
 			user.setBirth(faker.date().birthday());
 			// 儲存到資料庫
 			userRepository.saveAndFlush(user);
