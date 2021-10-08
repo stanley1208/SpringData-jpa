@@ -16,22 +16,22 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-@Table(name = "User2")
+@Table(name = "user")
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Column(length = 50,name="name")
+	@Column(length = 50, name = "name")
 	private String name;
 	
 	@Column
 	private String password;
 	
-	@Temporal(TemporalType.DATE)//存入資料庫的格式(DATE=日期格式,TIME=時間格式)
+	@Temporal(TemporalType.DATE) // 存入資料庫的格式(DATE = 日期格式, TIME = 時間格式)
 	@Column
-	@DateTimeFormat(pattern = "yyyy-MM-dd")//HTML form 表單呈現格式
-	@JsonFormat(pattern = "yyyy/MM/dd")//json字串呈現格式
+	@DateTimeFormat(pattern = "yyyy-MM-dd") // HTML form 表單呈現格式
+	@JsonFormat(pattern = "yyyy/MM/dd") // Json 字串呈現格式
 	private Date birth;
 
 	public Long getId() {

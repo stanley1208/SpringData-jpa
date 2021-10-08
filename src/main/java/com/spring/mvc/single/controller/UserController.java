@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import javax.enterprise.inject.New;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -16,8 +18,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,7 +37,56 @@ import com.spring.mvc.single.repository.UserRepository;
 public class UserController {
 	@Autowired
 	private UserRepository userRepository;
+	
+	//User資料維護首頁
+	@GetMapping(value = {"/","/index"})
+	public String index(Model model) {
+		List<User> users = userRepository.findAll();
 
+		model.addAttribute("user",new User());
+		model.addAttribute("users",users);
+		model.addAttribute("_method","POST");
+
+		return "user/index"; //重導到/WEB-INF/view/user/user.jsp
+	}
+	
+	//User新增
+	@PostMapping(value="/")
+	public String create(User user) {
+		userRepository.save(user);
+		System.out.println("User create: "+user);
+		return "redirect: ./";
+	}
+	
+	//User4 修改
+	@PutMapping(value = "/")
+	public String update(User user) {
+		userRepository.saveAndFlush(user);
+		System.out.println("User update: "+user);
+		return "redirect: ./";
+	}
+	
+	//User 刪除
+	@DeleteMapping(value = "/")
+	public String delete(User user) {
+		userRepository.delete(user.getId());
+		return "redirect: ./";
+	}
+	
+	//根據id查詢
+	@GetMapping("/{id}")
+	public String getUserById(Model model,@PathVariable Long id) {
+		User user=userRepository.findOne(id);
+		List<User> users = userRepository.findAll();
+
+		model.addAttribute("user",user);
+		model.addAttribute("users",users);
+		model.addAttribute("_method","PUT");
+		return "user/index"; // 重導到 /WEB-INF/view/user/index.jsp
+	}
+	
+	//-----------------------------
+	//以下是測試user的程式
 	// 新增範例資料
 	@GetMapping("/test/create_sample_data")
 	@ResponseBody
