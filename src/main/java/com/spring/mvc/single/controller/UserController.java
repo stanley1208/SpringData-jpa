@@ -71,7 +71,7 @@ public class UserController {
 		return "redirect: ./";
 	}
 
-	// 根據 id 查詢
+	// 根據 id 查詢給 update/edit 使用
 	@GetMapping("/{id}")
 	public String getUserById(Model model, @PathVariable Long id) {
 		User user = userRepository.findOne(id);
@@ -81,6 +81,17 @@ public class UserController {
 		model.addAttribute("_method", "PUT");
 		return "user/index"; // 重導到 /WEB-INF/view/user/index.jsp
 	}
+	
+	// 根據 id 查詢給 delete 使用
+		@GetMapping("/delete/{id}")
+		public String getUserById4Del(Model model, @PathVariable Long id) {
+			User user = userRepository.findOne(id);
+			List<User> users = userRepository.findAll();
+			model.addAttribute("user", user);
+			model.addAttribute("users", users);
+			model.addAttribute("_method", "DELETE");
+			return "user/index"; // 重導到 /WEB-INF/view/user/index.jsp
+		}
 
 	// -----------------------------
 	// 以下是測試user的程式

@@ -73,9 +73,10 @@
 									</td>
 									<td>
 										<button type="button"
-											onclick="alert('Homework');"
+											onclick="location.href='${ pageContext.request.contextPath }/mvc/user/delete/${ user.id }';"
 											class="pure-button pure-button-primary">Delete</button>
 									</td>
+									
 								</tr>
 							</c:forEach>
 						</tbody>
