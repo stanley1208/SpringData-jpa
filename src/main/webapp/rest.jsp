@@ -1,0 +1,60 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Head -->
+<%@include file="WEB-INF/view/include/head.jspf"%>
+</head>
+<body style="padding: 20px">
+
+	<div id="layout">
+		<!-- Menu toggle -->
+		<%@include file="WEB-INF/view/include/toggle.jspf"%>
+
+		<!-- Menu -->
+		<%@include file="WEB-INF/view/include/menu.jspf"%>
+
+		<div id="main">
+			<div class="header">
+				<h1>User</h1>
+				<h2>Rest</h2>
+			</div>
+
+			<table>
+				<td valign="top">
+					<!-- User Page表單 -->
+					<form class="pure-form">
+						<fieldset>User Form</fieldset>
+
+
+					</form>
+				</td>
+				<td valign="top">
+					<!-- User 列表 -->
+					<form class="pure-form">
+						<fieldset>User List</fieldset>
+						<table class="pure-table pure-table-bordered">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Name</th>
+									<th>Password</th>
+									<th>Birth</th>
+
+								</tr>
+							</thead>
+
+						</table>
+					</form>
+				</td>
+			</table>
+
+		</div>
+	</div>
+
+	<!-- Foot -->
+	<%@include file="WEB-INF/view/include/foot.jspf"%>
+
+</body>
+</html>
